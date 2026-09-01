@@ -1,0 +1,53 @@
+{
+  "resources": [
+    {
+      "uri": "skill://pr-reviewer",
+      "name": "PR reviewer skill",
+      "description": "Six-step methodology to review a pull request.",
+      "mimeType": "text/markdown",
+      "path": "skills/pr-reviewer.md"
+    },
+    {
+      "uri": "skill://pr-understanding",
+      "name": "PR understanding skill",
+      "description": "How to build a deep understanding of a pull request before reviewing it.",
+      "mimeType": "text/markdown",
+      "path": "skills/pr-understanding.md"
+    },
+    {
+      "uri": "instructions://general-instructions",
+      "name": "General instructions",
+      "description": "Execution order, error handling, retries and fallbacks.",
+      "mimeType": "text/markdown",
+      "path": "instructions/general-instructions.md"
+    },
+    {
+      "uri": "instructions://review-guidelines",
+      "name": "Review guidelines",
+      "description": "What to look for, red flags and security checklist.",
+      "mimeType": "text/markdown",
+      "path": "instructions/review-guidelines.md"
+    },
+    {
+      "uri": "instructions://tool-usage-instructions",
+      "name": "Tool usage instructions",
+      "description": "GitHub API parameters, rate limits and comment formats.",
+      "mimeType": "text/markdown",
+      "path": "instructions/tool-usage-instructions.md"
+    },
+    {
+      "uri": "config://agent-config",
+      "name": "Agent configuration",
+      "description": "Skills, tools and iteration budget of the PR review agent.",
+      "mimeType": "application/json",
+      "path": "config/agent-config.json"
+    },
+    {
+      "uri": "config://github-api-config",
+      "name": "GitHub API configuration",
+      "description": "Base URL, API version, retry and pagination policies.",
+      "mimeType": "application/json",
+      "path": "config/github-api-config.json"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "name": "copilot-pr-review-system",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Complete PR Review System: Agents, Skills, Tools, Instructions and MCP architecture example",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -rf dist",
+    "start": "node dist/agents/pr-review-agent.js",
+    "dev": "npm run build && npm run start",
+    "mcp": "node dist/mcp/mcp-server.js",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "typescript": "^5.7.2"
+  }
+}
