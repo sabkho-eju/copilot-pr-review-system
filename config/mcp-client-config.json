@@ -1,0 +1,7 @@
+{
+  "serverName": "copilot-pr-review",
+  "transportType": "stdio",
+  "serverPath": "./dist/mcp/mcp-server.js",
+  "autoConnect": true,
+  "requestTimeoutMs": 30000
+}

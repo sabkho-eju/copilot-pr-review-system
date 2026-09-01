@@ -1,0 +1,19 @@
+{
+  "apiVersion": "2022-11-28",
+  "baseUrl": "https://api.github.com",
+  "userAgent": "copilot-pr-review-system/0.1.0",
+  "timeout": 30000,
+  "retryPolicy": {
+    "maxAttempts": 3,
+    "backoff": "exponential",
+    "initialDelayMs": 500
+  },
+  "rateLimit": {
+    "requestsPerHour": 5000,
+    "minRemainingBeforeThrottle": 100
+  },
+  "pagination": {
+    "perPage": 30,
+    "maxPages": 10
+  }
+}

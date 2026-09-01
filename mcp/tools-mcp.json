@@ -1,0 +1,338 @@
+{
+  "tools": [
+    {
+      "name": "github_get_pr",
+      "description": "Fetch the metadata of a pull request (title, body, branches, stats).",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "owner": {
+            "type": "string",
+            "description": "Repository owner."
+          },
+          "repo": {
+            "type": "string",
+            "description": "Repository name."
+          },
+          "pr_number": {
+            "type": "number",
+            "description": "Pull request number."
+          }
+        },
+        "required": [
+          "owner",
+          "repo",
+          "pr_number"
+        ]
+      }
+    },
+    {
+      "name": "github_get_pr_diff",
+      "description": "Fetch the unified diff of a pull request.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "owner": {
+            "type": "string",
+            "description": "Repository owner."
+          },
+          "repo": {
+            "type": "string",
+            "description": "Repository name."
+          },
+          "pr_number": {
+            "type": "number",
+            "description": "Pull request number."
+          }
+        },
+        "required": [
+          "owner",
+          "repo",
+          "pr_number"
+        ]
+      }
+    },
+    {
+      "name": "github_get_issue",
+      "description": "Fetch an issue linked to the pull request under review.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "owner": {
+            "type": "string",
+            "description": "Repository owner."
+          },
+          "repo": {
+            "type": "string",
+            "description": "Repository name."
+          },
+          "issue_number": {
+            "type": "number",
+            "description": "Issue number."
+          }
+        },
+        "required": [
+          "owner",
+          "repo",
+          "issue_number"
+        ]
+      }
+    },
+    {
+      "name": "github_get_check_runs",
+      "description": "List the check runs of the head commit of a pull request.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "owner": {
+            "type": "string",
+            "description": "Repository owner."
+          },
+          "repo": {
+            "type": "string",
+            "description": "Repository name."
+          },
+          "pr_number": {
+            "type": "number",
+            "description": "Pull request number."
+          }
+        },
+        "required": [
+          "owner",
+          "repo",
+          "pr_number"
+        ]
+      }
+    },
+    {
+      "name": "github_create_comment",
+      "description": "Post a comment on a pull request conversation.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "owner": {
+            "type": "string",
+            "description": "Repository owner."
+          },
+          "repo": {
+            "type": "string",
+            "description": "Repository name."
+          },
+          "pr_number": {
+            "type": "number",
+            "description": "Pull request number."
+          },
+          "body": {
+            "type": "string",
+            "description": "Markdown body of the comment."
+          }
+        },
+        "required": [
+          "owner",
+          "repo",
+          "pr_number",
+          "body"
+        ]
+      }
+    },
+    {
+      "name": "github_create_review",
+      "description": "Publish a full review (body, event and optional inline comments).",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "owner": {
+            "type": "string",
+            "description": "Repository owner."
+          },
+          "repo": {
+            "type": "string",
+            "description": "Repository name."
+          },
+          "pr_number": {
+            "type": "number",
+            "description": "Pull request number."
+          },
+          "review": {
+            "type": "object",
+            "description": "Review payload: body, event, comments."
+          }
+        },
+        "required": [
+          "owner",
+          "repo",
+          "pr_number",
+          "review"
+        ]
+      }
+    },
+    {
+      "name": "get_file_content",
+      "description": "Read a repository file at an optional ref.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "owner": {
+            "type": "string",
+            "description": "Repository owner."
+          },
+          "repo": {
+            "type": "string",
+            "description": "Repository name."
+          },
+          "path": {
+            "type": "string",
+            "description": "File path inside the repository."
+          },
+          "ref": {
+            "type": "string",
+            "description": "Branch, tag or commit SHA."
+          }
+        },
+        "required": [
+          "owner",
+          "repo",
+          "path"
+        ]
+      }
+    },
+    {
+      "name": "get_file_history",
+      "description": "List the commits that touched a given file.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "owner": {
+            "type": "string",
+            "description": "Repository owner."
+          },
+          "repo": {
+            "type": "string",
+            "description": "Repository name."
+          },
+          "path": {
+            "type": "string",
+            "description": "File path inside the repository."
+          }
+        },
+        "required": [
+          "owner",
+          "repo",
+          "path"
+        ]
+      }
+    },
+    {
+      "name": "compare_files",
+      "description": "Compare a file between two refs and return a line based diff.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "owner": {
+            "type": "string",
+            "description": "Repository owner."
+          },
+          "repo": {
+            "type": "string",
+            "description": "Repository name."
+          },
+          "path": {
+            "type": "string",
+            "description": "File path inside the repository."
+          },
+          "ref1": {
+            "type": "string",
+            "description": "Base ref."
+          },
+          "ref2": {
+            "type": "string",
+            "description": "Head ref."
+          }
+        },
+        "required": [
+          "owner",
+          "repo",
+          "path",
+          "ref1",
+          "ref2"
+        ]
+      }
+    },
+    {
+      "name": "analyze_diff",
+      "description": "Score the quality of a unified diff and report lexical findings.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "diff": {
+            "type": "string",
+            "description": "Unified diff to analyse."
+          },
+          "language": {
+            "type": "string",
+            "description": "Override the detected language."
+          }
+        },
+        "required": [
+          "diff"
+        ]
+      }
+    },
+    {
+      "name": "detect_security_issues",
+      "description": "Detect common security anti-patterns in a unified diff.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "diff": {
+            "type": "string",
+            "description": "Unified diff to analyse."
+          },
+          "language": {
+            "type": "string",
+            "description": "Override the detected language."
+          }
+        },
+        "required": [
+          "diff"
+        ]
+      }
+    },
+    {
+      "name": "analyze_test_coverage",
+      "description": "Estimate whether the changed source files come with tests.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "diff": {
+            "type": "string",
+            "description": "Unified diff to analyse."
+          },
+          "test_files": {
+            "type": "array",
+            "description": "Extra test files to take into account."
+          }
+        },
+        "required": [
+          "diff"
+        ]
+      }
+    },
+    {
+      "name": "assess_risk_level",
+      "description": "Aggregate change signals into a low/medium/high risk level.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "changes": {
+            "type": "object",
+            "description": "Change summary produced by summarizeChanges."
+          }
+        },
+        "required": [
+          "changes"
+        ]
+      }
+    }
+  ]
+}

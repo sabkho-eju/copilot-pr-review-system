@@ -1,0 +1,23 @@
+{
+  "agentName": "pr-reviewer",
+  "modelId": "gpt-4",
+  "skillsToLoad": ["pr-understanding", "pr-reviewer"],
+  "toolsAvailable": [
+    "github_get_pr",
+    "github_get_pr_diff",
+    "github_get_issue",
+    "github_get_check_runs",
+    "github_create_comment",
+    "github_create_review",
+    "get_file_content",
+    "get_file_history",
+    "compare_files",
+    "analyze_diff",
+    "detect_security_issues",
+    "analyze_test_coverage",
+    "assess_risk_level"
+  ],
+  "instructionsPath": "./instructions/",
+  "skillsPath": "./skills/",
+  "maxIterations": 10
+}
