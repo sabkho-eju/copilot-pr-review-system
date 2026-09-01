@@ -133,9 +133,68 @@ export async function getFileHistory(
 }
 
 /**
- * Compares a file between two refs and produces a minimal line based diff.
- * TODO: replace the naive line comparison by a proper Myers diff implementation.
+ * Computes a line based diff using the classic LCS dynamic programming table.
+ * Returns the diff body without the `---`/`+++` header.
  */
+function lineDiff(beforeLines: string[], afterLines: string[]): { lines: string[]; added: number; removed: number } {
+  const rows = beforeLines.length;
+  const columns = afterLines.length;
+
+  // The DP table is O(rows * columns); above that budget the payload is not a
+  // reviewable text file anymore, so we report the change without the details.
+  if ((rows + 1) * (columns + 1) > 4_000_000) {
+    return {
+      lines: [`@@ file too large for a line diff (${rows} -> ${columns} lines) @@`],
+      added: columns,
+      removed: rows
+    };
+  }
+
+  const width = columns + 1;
+  const lcs = new Uint32Array((rows + 1) * width);
+  for (let i = rows - 1; i >= 0; i -= 1) {
+    for (let j = columns - 1; j >= 0; j -= 1) {
+      lcs[i * width + j] =
+        beforeLines[i] === afterLines[j]
+          ? (lcs[(i + 1) * width + (j + 1)] ?? 0) + 1
+          : Math.max(lcs[(i + 1) * width + j] ?? 0, lcs[i * width + (j + 1)] ?? 0);
+    }
+  }
+
+  const lines: string[] = [];
+  let added = 0;
+  let removed = 0;
+  let i = 0;
+  let j = 0;
+
+  while (i < rows && j < columns) {
+    if (beforeLines[i] === afterLines[j]) {
+      lines.push(` ${beforeLines[i] ?? ""}`);
+      i += 1;
+      j += 1;
+    } else if ((lcs[(i + 1) * width + j] ?? 0) >= (lcs[i * width + (j + 1)] ?? 0)) {
+      lines.push(`-${beforeLines[i] ?? ""}`);
+      removed += 1;
+      i += 1;
+    } else {
+      lines.push(`+${afterLines[j] ?? ""}`);
+      added += 1;
+      j += 1;
+    }
+  }
+  for (; i < rows; i += 1) {
+    lines.push(`-${beforeLines[i] ?? ""}`);
+    removed += 1;
+  }
+  for (; j < columns; j += 1) {
+    lines.push(`+${afterLines[j] ?? ""}`);
+    added += 1;
+  }
+
+  return { lines, added, removed };
+}
+
+/** Compares a file between two refs and produces a line based unified diff. */
 export async function compareFiles(
   owner: string,
   repo: string,
@@ -155,28 +214,11 @@ export async function compareFiles(
     return fail<FileComparison>(after.error ?? `unable to read ${filePath}@${ref2}`, after.metadata);
   }
 
-  const beforeLines = before.data.content.split("\n");
-  const afterLines = after.data.content.split("\n");
-  const diffLines: string[] = [`--- ${filePath}@${ref1}`, `+++ ${filePath}@${ref2}`];
-  let addedLines = 0;
-  let removedLines = 0;
-
-  const maxLines = Math.max(beforeLines.length, afterLines.length);
-  for (let index = 0; index < maxLines; index += 1) {
-    const beforeLine = beforeLines[index];
-    const afterLine = afterLines[index];
-    if (beforeLine === afterLine) {
-      continue;
-    }
-    if (beforeLine !== undefined) {
-      diffLines.push(`-${beforeLine}`);
-      removedLines += 1;
-    }
-    if (afterLine !== undefined) {
-      diffLines.push(`+${afterLine}`);
-      addedLines += 1;
-    }
-  }
+  const { lines, added: addedLines, removed: removedLines } = lineDiff(
+    before.data.content.split("\n"),
+    after.data.content.split("\n")
+  );
+  const diffLines = [`--- ${filePath}@${ref1}`, `+++ ${filePath}@${ref2}`, ...lines];
 
   return ok(
     {
